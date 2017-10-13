@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Account</title>
+<!-- Custom Theme files -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+<!-- //Custom Theme files -->
+<link href="css/bootstrap.css" type="text/css" rel="stylesheet" media="all">
+<link href="css/style.css" type="text/css" rel="stylesheet" media="all">
+<link href="css/nave.css" type="text/css" rel="stylesheet" media="all"><!-- 丁稳写的全局css -->
+<!-- js -->
+<script src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/bootstrap-3.1.1.min.js"></script>
+<!-- //js -->	
+<!-- cart -->
+<script src="js/simpleCart.min.js"> </script>
+<!-- cart -->
+<script src="js/sweet.js"> </script><!-- 丁稳写的全局JS -->
+<style>
+	#register-account>.secse{
+		font-size:30px;
+		display: block;
+		width:100%;
+		height: 50px;
+		text-align: center;
+		margin: 50px auto;
+	}
+</style>
+</head>
+<body>
+	<!--header-->
+	<div class="header">
+		<div class="container">
+			<nav class="navbar navbar-default" role="navigation">
+				<div class="navbar-header">
+					<!-- <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar">这是哪里这是哪里啊啊啊啊啊啊啊啊</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button> -->
+					<h1 class="navbar-brand"><a  href="index.html">Sweet</a></h1>
+				</div>
+				<!--navbar-header-->
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<li><a href="index.html" class="active">Home</a></li>
+
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">给自己买<b class="caret"></b></a>
+							<ul class="dropdown-menu multi-column columns-4 animated bounceInDown">
+								<div class="row" id="navShowOne">
+									
+								</div>
+							</ul>
+						</li>
+					
+					   <li class="dropdown grid">
+							<a href="#" class="dropdown-toggle list1" data-toggle="dropdown">给女友买<b class="caret"></b></a>
+							<ul class="dropdown-menu multi-column columns-4 animated bounceInDown">
+								<div class="row" id="navShowTwo">
+									
+								</div>
+							</ul>
+						</li>
+
+						<li class="dropdown grid">
+							<a href="#" class="dropdown-toggle list1" data-toggle="dropdown">给朋友买<b class="caret"></b></a>
+							<ul class="dropdown-menu multi-column columns-4 animated bounceInDown">
+								<div class="row" id="navShowThree">
+									
+								</div>
+							</ul>
+						</li>
+						<li class="dropdown grid">
+							<a href="contact.html" class="dropdown-toggle list1">关于我们</a>
+						</li>								
+					</ul> 
+					<!--/.navbar-collapse-->
+				</div>
+				<!--//navbar-header-->
+			</nav>
+			<div class="header-info">
+				<div class="header-right search-box">
+					<a href="#"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></a>				
+					<div class="search">
+						<form class="navbar-form">
+							<input type="text" class="form-control up-loadKw" id="upload-kw">
+                            <button type="button" onclick="uploadKw()" class="btn btn-default" aria-label="Left Align">
+								Search
+							</button>
+						</form>
+					</div>	
+				</div>
+				<div class="header-right login">
+					<a><span class="glyphicon glyphicon-user" aria-hidden="true"></span></a>
+					<div id="loginBox">    
+
+						 <form id="loginForm" action="data/login.php"> 
+						<!-- <div id="loginForm"> -->
+							<fieldset id="body">
+								<fieldset>
+									<label for="phone">Phone Number</label>
+									<input type="text" name="phone" id="phone" onblur="checkPhone()">
+								</fieldset>
+								<fieldset>
+									<label for="upwd">Password</label>
+									<input type="password" name="upwd" id="upwd">
+								</fieldset>
+								<input type="submit" id="login" value="Sign in">
+								<label for="checkbox"><input type="checkbox" id="checkbox"> <i>Remember me</i></label>
+							</fieldset>
+							<p>没有账号? <a class="sign" href="account.html">那就注册</a> <span><a href="#">忘记密码就点我</a></span></p>
+						</form>
+
+					</div>
+				</div>
+				<div class="header-right cart">
+					<a href="#"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span></a>
+					<div class="cart-box" id="nav-cart-box">
+						<h4><a href="checkout.html">
+							<span id="simpleCart_total" class="simpleCart_total"> $0.00 </span> (<span id="simpleCart_quantity" class="simpleCart_quantity"> 0 </span>) 
+						</a></h4>
+						<p><a href="javascript:deleteCart(-1);" class="simpleCart_empty">清空购物车</a></p>
+						<div class="clearfix"> </div>
+					</div>
+				</div>
+				<div class="clearfix"> </div>
+			</div>
+			<div class="clearfix"> </div>
+		</div>
+	</div>
+	<!--//header-->
+	<!--account为注册页面主体内容-->
+	<div class="account redfont" id="register-account">
+		<div class="container">
+			<div class="register">
+				<!-- <form>  -->
+					<div class="register-top-grid">
+						<h3>Personal information</h3>
+						<div class="input">
+							<span>Phone Number<label>*</label></span>
+							<input type="text" id="register-phone" onblur="registerCheckPhone()"> 
+						</div>
+						<!-- <div class="input">
+							<span>Last Name<label>*</label></span>
+							<input type="text"> 
+						</div> -->
+						<div class="input">
+							<span>Your Address<label></label></span>
+							<input type="text"  value="最好还是写上吧！我怕1.0版本没时间写资料修改页面！" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '最好还是写上吧！我怕1.0版本没时间写资料修改页面！';}" required=""> 
+						</div>
+						<span class="checkbox">带 * 的是必须要填的哟！填写不完整注册按钮都找不到。</span>
+						<!-- <a class="news-letter" href="#">
+							<label class="checkbox"><input type="checkbox" name="checkbox" checked=""><i> </i>Sign Up for Newsletter</label>
+						</a> -->
+						<div class="clearfix"> </div>
+					</div>
+				    <div class="register-bottom-grid">
+						<h3>Login information</h3>
+						<div class="input">
+							<span>Password<label>*</label></span>
+							<input type="password" id="register-upwd" onblur="checkUpwd()">
+						</div>
+						<div class="input">
+							<span>Confirm Password<label>*</label></span>
+							<input type="password" id="register-cpwd" onkeyup="checkCpwd()">
+						 </div>
+					</div>
+				<!-- </form> -->
+				<div class="clearfix"> </div>
+				<div class="register-but">
+				   <form> 
+					   <span id="somethingShow" class="redfont">
+					   <input type="button" value="注册" onclick="registerSubmit()">
+						</span>
+					   <div class="clearfix"> </div>
+				    </form> 
+				</div>
+			</div>
+	    </div>
+	</div>
+	<script>
+		function registerCheckPhone(){
+			var phone = GI("register-phone").value;
+			if(phone==""){
+				GI("somethingShow").innerHTML = "手机号必须要写的哟。";
+				return;
+			}
+			var xhr = getXhr();
+			xhr.open("get","data/register_phone_check.php?phone="+phone,true);
+			xhr.onreadystatechange = function(){
+				if(xhr.readyState==4 && xhr.status==200){
+					var res = Number(xhr.responseText);
+					if(res==0){
+						GI("somethingShow").innerHTML = "该手机号已经被注册了。";
+					}else{
+						GI("somethingShow").innerHTML = " <input type='button' value='注册'  onclick='registerSubmit()'>";
+					}
+				}
+			}
+			xhr.send(null);
+		}
+		//这是密码框是否空验证
+		function checkUpwd(){
+			var upwd = GI("register-upwd").value;
+			if(upwd==""){
+				GI("somethingShow").innerHTML = "密码还是要写。";
+			}
+		}
+
+		//这里是两次密码两次值是否相同的验证
+		function checkCpwd(){
+			var cpwd = GI("register-cpwd").value;
+			if(cpwd==""){
+				GI("somethingShow").innerHTML = "请填写完整！！！";
+				return;
+			}
+			var upwd = GI("register-upwd").value;
+			if(cpwd==upwd){
+				GI("somethingShow").innerHTML = " <input type='button' value='注册'  onclick='registerSubmit()'>";
+			}else{
+				GI("somethingShow").innerHTML ="两次输入不一致！";
+			}
+		}
+
+		//注册验证
+		function registerSubmit(){
+			//console.log("执行");
+			var phone = GI("register-phone").value;
+			var upwd = GI("register-upwd").value;
+			var xhr = getXhr();
+			xhr.open("post","data/register.php",true);
+			xhr.onreadystatechange = function(){
+				if(xhr.readyState==4 && xhr.status==200){
+					console.log("执行回调了");
+					var res = Number(xhr.responseText);
+					if(res>0){
+						GI("register-account").innerHTML = "<span class='secse'>注册成功,3秒跳转~~~</span>";
+						localStorage.uid = res;
+						setTimeout("GI('register-account').innerHTML = \"<span class='secse'>注册成功,2秒跳转~~~</span>\";",1000);
+						setTimeout("GI('register-account').innerHTML = \"<span class='secse'>注册成功,1秒跳转~~~</span>\";",2000);
+						setTimeout("window.location.href='index.html'","3000");
+					}
+				}
+			}
+			xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+			xhr.send("phone="+phone+"&upwd="+upwd);
+		}
+	</script>
+	<!--//account-->
+	<!--footer-->
+	<div class="footer">
+		<div class="container">
+			<div class="footer-grids">
+				<div class="col-md-2 footer-grid">
+					<h4>company</h4>
+					<ul>
+						<li><a href="products.html">产品首页</a></li>
+						<li><a href="#">办公地址</a></li>
+						<li><a href="#">团队成员</a></li>
+						<li><a href="#">项目开发</a></li>
+						<li><a href="#">产品定位</a></li>
+					</ul>
+				</div>
+				<div class="col-md-2 footer-grid">
+					<h4>service</h4>
+					<ul>
+						<li><a href="#">技术支持</a></li>
+						<li><a href="#">售后保障</a></li>
+						<li><a href="#">免费维护</a></li>
+						<li><a href="contact.html">联系我们</a></li>
+					</ul>
+				</div>
+				<div class="col-md-3 footer-grid">
+					<h4>I have a job</h4>
+					<ul>
+						<li><a href="#">前端工程师</a></li>
+						<li><a href="#">数据库分析</a></li>
+						<li><a href="#">后台维护师</a></li>
+						<li><a href="#">产品测试组</a></li>
+					</ul>
+				</div>
+				<div class="col-md-2 footer-grid">
+					<h4>legal</h4>
+					<ul>
+						<li><a href="#">隐私政策</a></li>
+						<li><a href="#">法律条款</a></li>
+						<li><a href="#">营业执照</a></li>
+					</ul>
+				</div>
+				<div class="col-md-3 footer-grid icons">
+					<h4>Connect with Us</h4>
+					<ul>
+						<li><a href="#"><img src="images/i1.png" alt=""/>如果我们有脸书</a></li>
+						<li><a href="#"><img src="images/i2.png" alt=""/>如果我们有推特</a></li>
+						<li><a href="#"><img src="images/wechat.png" alt=""/>还是用微信联系吧</a></li>
+						<li><a href="#"><img src="images/sina.png" alt=""/>或者用新浪也行</a></li>
+					</ul>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+	</div>
+	<!--footer-->
+	<div class="footer-bottom">
+		<div class="container">
+			<p>Copyright &copy; 2017.Sweet有限公司所有权，团队：①<a href="#">丁稳</a>，②<a href="#">夏武</a>，②<a href="#">骆俊</a></p>
+		</div>
+	</div>
+
+</body>
+</html>

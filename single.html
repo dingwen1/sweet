@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>single</title>
+<!-- Custom Theme files -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+<!-- //Custom Theme files -->
+<link href="css/bootstrap.css" type="text/css" rel="stylesheet" media="all">
+<link href="css/style.css" type="text/css" rel="stylesheet" media="all">
+<link href="css/nave.css" type="text/css" rel="stylesheet" media="all">
+<link href="css/animate.css" type="text/css" rel="stylesheet" media="all">
+<!-- js -->
+<script src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/bootstrap-3.1.1.min.js"></script>
+<script src="js/imagezoom.js"></script>
+<script src="js/sweet.js"></script> 
+ 
+<!-- //js -->
+<!-- cart -->
+<!-- <script src="js/simpleCart.min.js"> </script> -->
+<!-- cart -->
+<!--以下的是作弊，对样式实在不想再去分析了  -->
+<style>
+	.product-model-sec{
+		width: 100%;
+	}
+	.product-grid{
+		border:2px solid #F17C67;
+	}
+</style>
+<!-- FlexSlider -->
+<script defer src="js/jquery.flexslider.js"></script>
+<link rel="stylesheet" href="css/flexslider.css" type="text/css" media="screen" />
+<script>
+	// Can also be used with $(document).ready()
+	$(window).load(function() {
+	  $('.flexslider').flexslider({
+		animation: "slide",
+		controlNav: "thumbnails"
+	  });
+	});
+	window.onload = function(){
+   		 uidCheck();//检查用户id是否存在
+		headerMain();
+		productInfoLoad();
+	}
+	//写的是商品详情页面的商品数据加载
+	function productInfoLoad(){
+		var pid = localStorage.pid;
+		var xhr = getXhr();
+		xhr.open("get","data/product_info_load.php?pid="+pid,true);
+		xhr.onreadystatechange = function(){
+			if(xhr.readyState==4 && xhr.status==200){
+				var proAll = JSON.parse(xhr.responseText);
+				//这里将做数据处理
+				//下面这段是对放大镜图片数据的处理
+				$(".slides li.one").attr('data-thumb',proAll.lg);
+				$(".slides li.one img").attr('src',proAll.lg);
+				$(".slides li.two").attr('data-thumb',proAll.md);
+				$(".slides li.two img").attr('src',proAll.md);
+				$(".slides li.three").attr('data-thumb',proAll.sm);
+				$(".slides li.three img").attr('src',proAll.sm);
+				$(".flex-control-thumbs li:nth-child(1) img").attr('src',proAll.lg);
+				$(".flex-control-thumbs li:nth-child(2) img").attr('src',proAll.md);
+				$(".flex-control-thumbs li:nth-child(3) img").attr('src',proAll.sm);
+
+				$(".col-md-4>h3").html(proAll.pname);
+				$(".col-md-4>p:not(.qty)").html(proAll.title);
+				$(".col-md-4 .family li").html(proAll.fname);
+				$(".col-md-4 .tag>.onep").html("Category :"+proAll.fname);
+				/* 下面写的是星星评分代码的拼接 */
+				var xingxing = "";
+				for(var i = 0;i<proAll.score;i++){
+					xingxing += "<span>★</span>";
+				}
+				xingxing +="：评分"
+				$(".galry>.rating").html(xingxing);
+
+				var sale = "";
+				if(proAll.onsale>0.9){
+					sale = "现价：￥"+(proAll.onsale*proAll.price).toFixed(2)+"元~该商品不打折";
+				}else if(proAll.onsale>0.7){
+					sale = "现价：￥"+(proAll.onsale*proAll.price).toFixed(2)+"元~八折优惠";
+				}else if(proAll.onsale>0.5){
+					sale = "现价：￥"+(proAll.onsale*proAll.price).toFixed(2)+"元~六折优惠";
+				}else if(proAll.onsale>0.3){
+					sale = "现价：￥"+(proAll.onsale*proAll.price).toFixed(2)+"元~四折优惠";
+				}
+				$(".prices h5.item_price").html("原价：￥"+proAll.price+"元");
+				$(".size:not(.family) h3").html(sale);
+				//下面是拼的添加购物车的点击事件
+				$(".col-md-4>.btn_form a").attr("onclick"," addProductCart("+proAll.pid+",1)");
+				//下面写的是分页滑栏
+				$("#collapseOne div.panel-body").html("\t"+proAll.title);
+				$("#collapseTwo div.panel-body img:nth-child(1)").attr('src',proAll.lg);
+				$("#collapseTwo div.panel-body img:nth-child(2)").attr('src',proAll.md);
+				$("#collapseTwo div.panel-body img:nth-child(3)").attr('src',proAll.sm);
+			}
+		}
+		xhr.send(null);
+
+		// 获取相关商品
+		var xhr2 = getXhr();
+		xhr2.open("get","data/get_ralated_product.php?pid="+pid,true);
+		xhr2.onreadystatechange = function(){
+			if(xhr2.readyState==4 && xhr2.status==200){
+				//处理得到的四条相关商品的数据
+				var relatedPro = JSON.parse(xhr2.responseText);
+				for(var i =0;i<relatedPro.length;i++){
+					$(".product-model-sec>div:nth-child("+(i+1)+") a").attr('onclick',"upPid("+relatedPro[i].pid+")");
+					$(".product-model-sec>div:nth-child("+(i+1)+") div.prt_name h4").html(relatedPro[i].pname);
+					$(".product-model-sec>div:nth-child("+(i+1)+") span.item_price").html("现价￥"+(relatedPro[i].price*relatedPro[i].onsale).toFixed(2)+"元");
+					$(".product-model-sec>div:nth-child("+(i+1)+") p.pric1").html("原价：￥"+relatedPro[i].price+"元");
+					$(".product-model-sec>div:nth-child("+(i+1)+") img").attr('src',relatedPro[i].pic);
+					$(".product-model-sec>div:nth-child("+(i+1)+") p.disc").html(relatedPro[i].onsale*10+"折优惠");
+				}
+			}
+		}
+		xhr2.send(null);
+	}
+	console.log(localStorage.pid);//检查该页面之前是否有更新缓存的pid
+</script>
+
+<!--//FlexSlider -->
+</head>
+<body>
+	<!--header-->
+	<div class="header">
+		<div class="container">
+			<nav class="navbar navbar-default" role="navigation">
+				<div class="navbar-header">
+					<!-- <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar">这是哪里这是哪里啊啊啊啊啊啊啊啊</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button> -->
+					<h1 class="navbar-brand"><a  href="index.html">Sweet</a></h1>
+				</div>
+				<!--navbar-header-->
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<li><a href="index.html" class="active">Home</a></li>
+
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">给自己买<b class="caret"></b></a>
+							<ul class="dropdown-menu multi-column columns-4 animated bounceInDown">
+								<div class="row" id="navShowOne">
+									
+								</div>
+							</ul>
+						</li>
+					
+					   <li class="dropdown grid">
+							<a href="#" class="dropdown-toggle list1" data-toggle="dropdown">给女友买<b class="caret"></b></a>
+							<ul class="dropdown-menu multi-column columns-4 animated bounceInDown">
+								<div class="row" id="navShowTwo">
+									
+								</div>
+							</ul>
+						</li>
+
+						<li class="dropdown grid">
+							<a href="#" class="dropdown-toggle list1" data-toggle="dropdown">给朋友买<b class="caret"></b></a>
+							<ul class="dropdown-menu multi-column columns-4 animated bounceInDown">
+								<div class="row" id="navShowThree">
+									
+								</div>
+							</ul>
+						</li>
+						<li class="dropdown grid">
+							<a href="contact.html" class="dropdown-toggle list1">关于我们</a>
+						</li>								
+					</ul> 
+					<!--/.navbar-collapse-->
+				</div>
+				<!--//navbar-header-->
+			</nav>
+			<div class="header-info">
+				<div class="header-right search-box">
+					<a href="#"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></a>				
+					<div class="search">
+						<form class="navbar-form">
+							<input type="text" class="form-control up-loadKw" id="upload-kw">
+                            <button type="button" onclick="uploadKw()" class="btn btn-default" aria-label="Left Align">
+								Search
+							</button>
+						</form>
+					</div>	
+				</div>
+				<div class="header-right login">
+					<a><span class="glyphicon glyphicon-user" aria-hidden="true"></span></a>
+					<div id="loginBox">    
+
+						 <form id="loginForm" action="data/login.php"> 
+						<!-- <div id="loginForm"> -->
+							<fieldset id="body">
+								<fieldset>
+									<label for="phone">Phone Number</label>
+									<input type="text" name="phone" id="phone" onblur="checkPhone()">
+								</fieldset>
+								<fieldset>
+									<label for="upwd">Password</label>
+									<input type="password" name="upwd" id="upwd">
+								</fieldset>
+								<input type="submit" id="login" value="Sign in">
+								<label for="checkbox"><input type="checkbox" id="checkbox"> <i>Remember me</i></label>
+							</fieldset>
+							<p>没有账号? <a class="sign" href="account.html">那就注册</a> <span><a href="#">忘记密码就点我</a></span></p>
+						</form>
+
+					</div>
+				</div>
+				<div class="header-right cart">
+					<a href="#"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span></a>
+					<div class="cart-box" id="nav-cart-box">
+						<h4><a href="checkout.html">
+							<span id="simpleCart_total" class="simpleCart_total"> $0.00 </span> (<span id="simpleCart_quantity" class="simpleCart_quantity"> 0 </span>) 
+						</a></h4>
+						<p><a href="javascript:deleteCart(-1);" class="simpleCart_empty">清空购物车</a></p>
+						<div class="clearfix"> </div>
+					</div>
+				</div>
+				<div class="clearfix"> </div>
+			</div>
+			<div class="clearfix"> </div>
+		</div>
+	</div>
+	<!--//header-->
+	<!--//single-page-->
+	<div class="single">
+		<div class="container">
+			<div class="single-grids">				
+				<div class="col-md-4 single-grid">		
+					<div class="flexslider animated fadeInLeft">
+						<ul class="slides">
+							<li data-thumb="images/s1.png" class="one">
+								<div class="thumb-image"> <img src="images/s1.png" data-imagezoom="true" class="img-responsive"> </div>
+							</li>
+							<li data-thumb="images/s2.png" class="two">
+								 <div class="thumb-image"> <img src="images/s2.png" data-imagezoom="true" class="img-responsive"> </div>
+							</li>
+							<li data-thumb="images/s3.png" class="three">
+							   <div class="thumb-image"> <img src="images/s3.png" data-imagezoom="true" class="img-responsive"> </div>
+							</li> 
+						</ul>
+					</div>
+				</div>	
+				<div class="col-md-4 single-grid simpleCart_shelfItem">		
+					<h3>Yummy freshly baked Blackforest Cake 1 Kg! with blends of chocochips</h3>
+					<p>Cake cutting is one of the most wonderful ways of celebrating a special moment. What better way to celebrate than with a rich and mouth watering chocochips cake</p>
+					<ul class="size family">
+						<h3>品种家族</h3>
+							<li></li>
+					</ul>
+					<ul class="size">
+						<h3>2-3 Tier Cakes</h3>
+							<li><a href="#">  </a></li>
+						
+					</ul>
+					<div class="galry">
+						<div class="prices">
+							<h5 class="item_price">$995.00</h5>
+						</div>
+						<div class="rating">
+							这里面装的是星星啊。
+						</div>
+						<div class="clearfix"></div>
+					</div>
+					<p class="qty"> 选购数量 :  </p>
+					
+					<input min="1" type="number" id="quantity1" name="quantity" value="1" class="form-control input-small">
+			
+					<div class="btn_form">
+						<a href="#" class="add-cart item_add" onclick="">添加至购物车</a>	
+					</div>
+					<div class="tag">
+						<p class="onep">Category : </p>
+						<p>谁做的？ : <a href="#">DW</a></p>
+					</div>
+				</div>
+				<div class="col-md-4 single-grid1">
+					<h2>GoGoGo</h2>
+					<ul>
+						<li><a href="checkout.html">购物车</a></li>
+						<li><a href="products.html">去看看别的商品</a></li>
+						<li><a href="account.html">注册吗？</a></li>
+						<li><a href="index.html">回到首页</a></li>
+						<li><a href="contact.html">关于我们</a></li>
+						<li><a href="checkout.html">购物车</a></li>
+						<li><a href="checkout.html">购物车</a></li>
+					
+					</ul>
+				</div>
+				<div class="clearfix"> </div>
+			</div>
+		</div>
+	</div>
+	<!-- collapse -->
+	<div class="collpse tabs">
+		<div class="container">
+			<div class="panel-group collpse" id="accordion" role="tablist" aria-multiselectable="true">
+				<div class="panel panel-default">
+					<div class="panel-heading" role="tab" id="headingOne">
+						<h4 class="panel-title">
+							<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+							  ✿商品详情
+							</a>
+						</h4>
+					</div>
+					<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+						<div class="panel-body">
+							Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+						</div>
+					</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading" role="tab" id="headingTwo">
+						<h4 class="panel-title">
+							<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+							   ✿甜品美图
+							</a>
+						</h4>
+					</div>
+					<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+						<div class="panel-body">
+							<img src="#" >
+							<img src="#" >
+							<img src="#" >
+						</div>
+					</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading" role="tab" id="headingThree">
+						<h4 class="panel-title">
+							<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+								✿用户评价（5）
+							</a>
+						</h4>
+					</div>
+					<div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+						<div class="panel-body">
+							该功能未上线，敬请期待！
+						</div>
+					</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading" role="tab" id="headingFour">
+						<h4 class="panel-title">
+							<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+								✿关于我们
+							</a>
+						</h4>
+					</div>
+					<div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+						<div class="panel-body">
+							<p style="text-indent:30px">Sweet甜品店以弘扬甜品原文化为己任，以专业、专心、专家、为企业经营理念。公司秉承诚信、求实的精神，坚持以客户为本的原则，重视加盟商、珍惜每一个加盟商与我们香港杏记甜品的合作机会，共同发展，迎接甜品新财富之旅。杏记将根据每一位客户的需求制定个性化的服务程式，创造“新甜品文化”之精神，皇家的品质，凤凰展翅之理想。
+							<p style="text-indent:30px">起于木，至于口，是为			Sweet。</p>
+							<p style="text-indent:30px">Sweet坚持采摘纯天然			水果，小产区原野原味，至美至鲜的甜品，源于天然雨水			和阳光，让您尽情品尝大自然的味道。
+								在晴朗的午后，明媚的下午四点，饱满多汁的原季水			果在酸性和糖分平衡瞬间成熟，便被经验丰富的水果			采集师傅及时采摘</p>
+							<p style="text-indent:30px">果实的原味在恰到好吃			的阳光催化下，最张扬的味道得以保留，同时锁住果汁原			味，驱除露水对糖分的稀释和潮气的影响，味道更为浓			郁，口感富有活力。
+							Sweet保持对新水果的苛刻态度，满足最挑剔的味蕾。			</p>
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--//collapse -->
+	<!--related-products-->
+	<div class="related-products">
+		<div class="container">
+			<h3 style="font-size:30px;">♨相关商品♨</h3>
+			<div class="product-model-sec single-product-grids">
+				<div class="product-grid single-product">
+					<a href="single.html" onclick="">
+					<div class="more-product"><span> </span></div>						
+					<div class="product-img b-link-stripe b-animate-go  thickbox">
+						<img src="images/m1.png" class="img-responsive" alt="">
+						<div class="b-wrapper">
+						<h4 class="b-animate b-from-left  b-delay03">							
+						<button>View</button>
+						</h4>
+						</div>
+					</div>
+					</a>					
+					<div class="product-info simpleCart_shelfItem">
+						<div class="product-info-cust prt_name">
+							<h4>Product #1</h4>								
+							<span class="item_price">$2000</span>
+							<div class="ofr">
+							  <p class="pric1"><del>$2300</del></p>
+							  <p class="disc">[15% Off]</p>
+							</div>
+							<div class="clearfix"> </div>
+						</div>												
+					</div>
+				</div>
+				<div class="product-grid single-product">
+					<a href="single.html">
+					<div class="more-product"><span> </span></div>						
+					<div class="product-img b-link-stripe b-animate-go  thickbox">
+						<img src="images/m2.png" class="img-responsive" alt="">
+						<div class="b-wrapper">
+						<h4 class="b-animate b-from-left  b-delay03">							
+						<button>View</button>
+						</h4>
+						</div>
+					</div>
+					</a>					
+					<div class="product-info simpleCart_shelfItem">
+						<div class="product-info-cust prt_name">
+							<h4>Product #1</h4>								
+							<span class="item_price">$2000</span>
+							<div class="ofr">
+							  <p class="pric1"><del>$2300</del></p>
+							  <p class="disc">[15% Off]</p>
+							</div>
+							<div class="clearfix"> </div>
+						</div>												
+					</div>
+				</div>
+				<div class="product-grid single-product">
+					<a href="single.html">
+					<div class="more-product"><span> </span></div>						
+					<div class="product-img b-link-stripe b-animate-go  thickbox">
+						<img src="images/m3.png" class="img-responsive" alt="">
+						<div class="b-wrapper">
+						<h4 class="b-animate b-from-left  b-delay03">							
+						<button>View</button>
+						</h4>
+						</div>
+					</div>
+					</a>					
+					<div class="product-info simpleCart_shelfItem">
+						<div class="product-info-cust prt_name">
+							<h4>Product #1</h4>								
+							<span class="item_price">$2000</span>
+							<div class="ofr">
+							  <p class="pric1"><del>$2300</del></p>
+							  <p class="disc">[15% Off]</p>
+							</div>
+							<div class="clearfix"> </div>
+						</div>												
+					</div>
+				</div>
+				<div class="product-grid single-product">
+					<a href="single.html">
+					<div class="more-product"><span> </span></div>						
+					<div class="product-img b-link-stripe b-animate-go  thickbox">
+						<img src="images/m4.png" class="img-responsive" alt="">
+						<div class="b-wrapper">
+						<h4 class="b-animate b-from-left  b-delay03">							
+						<button>view</button>
+						</h4>
+						</div>
+					</div>
+					</a>					
+					<div class="product-info simpleCart_shelfItem">
+						<div class="product-info-cust prt_name">
+							<h4>Product #1</h4>								
+							<span class="item_price">$2000</span>
+							<div class="ofr">
+							  <p class="pric1"><del>$2300</del></p>
+							  <p class="disc">[15% Off]</p>
+							</div>
+							<div class="clearfix"> </div>
+						</div>												
+					</div>
+				</div>
+				<div class="clearfix"> </div>
+			</div>
+		</div>
+	</div>
+	<!--related-products-->
+	<!--footer-->
+	<div class="footer">
+		<div class="container">
+			<div class="footer-grids">
+				<div class="col-md-2 footer-grid">
+					<h4>company</h4>
+					<ul>
+						<li><a href="products.html">产品首页</a></li>
+						<li><a href="#">办公地址</a></li>
+						<li><a href="#">团队成员</a></li>
+						<li><a href="#">项目开发</a></li>
+						<li><a href="#">产品定位</a></li>
+					</ul>
+				</div>
+				<div class="col-md-2 footer-grid">
+					<h4>service</h4>
+					<ul>
+						<li><a href="#">技术支持</a></li>
+						<li><a href="#">售后保障</a></li>
+						<li><a href="#">免费维护</a></li>
+						<li><a href="contact.html">联系我们</a></li>
+					</ul>
+				</div>
+				<div class="col-md-3 footer-grid">
+					<h4>I have a job</h4>
+					<ul>
+						<li><a href="#">前端工程师</a></li>
+						<li><a href="#">数据库分析</a></li>
+						<li><a href="#">后台维护师</a></li>
+						<li><a href="#">产品测试组</a></li>
+					</ul>
+				</div>
+				<div class="col-md-2 footer-grid">
+					<h4>legal</h4>
+					<ul>
+						<li><a href="#">隐私政策</a></li>
+						<li><a href="#">法律条款</a></li>
+						<li><a href="#">营业执照</a></li>
+					</ul>
+				</div>
+				<div class="col-md-3 footer-grid icons">
+					<h4>Connect with Us</h4>
+					<ul>
+						<li><a href="#"><img src="images/i1.png" alt=""/>如果我们有脸书</a></li>
+						<li><a href="#"><img src="images/i2.png" alt=""/>如果我们有推特</a></li>
+						<li><a href="#"><img src="images/wechat.png" alt=""/>还是用微信联系吧</a></li>
+						<li><a href="#"><img src="images/sina.png" alt=""/>或者用新浪也行</a></li>
+					</ul>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+	</div>
+	<!--footer-->
+	<div class="footer-bottom">
+		<div class="container">
+			<p>Copyright &copy; 2017.Sweet有限公司所有权，团队：①<a href="#">丁稳</a>，②<a href="#">夏武</a>，③<a href="#">骆俊</a></p>
+		</div>
+	</div>
+</body></html>

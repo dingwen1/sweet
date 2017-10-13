@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Contact</title>
+<!-- Custom Theme files -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+<!-- //Custom Theme files -->
+<link href="css/bootstrap.css" type="text/css" rel="stylesheet" media="all">
+<link href="css/style.css" type="text/css" rel="stylesheet" media="all">
+<link href="css/nave.css" type="text/css" rel="stylesheet" media="all"><!-- 丁稳写的全局的css -->
+<!-- js -->
+<script src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/bootstrap-3.1.1.min.js"></script>
+<!-- //js -->
+<!-- cart -->
+<script src="js/simpleCart.min.js"> </script>
+<script src="js/sweet.js"> </script><!-- 丁稳写的全局js -->
+<script>
+	window.onload = function(){
+    uidCheck();//检查用户id是否存在
+    headerMain();
+	}
+</script>
+<!-- cart -->
+</head>
+<body>
+	<!--header-->
+	<div class="header">
+		<div class="container">
+			<nav class="navbar navbar-default" role="navigation">
+				<div class="navbar-header">
+					<!-- <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar">这是哪里这是哪里啊啊啊啊啊啊啊啊</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button> -->
+					<h1 class="navbar-brand"><a  href="index.html">Sweet</a></h1>
+				</div>
+				<!--navbar-header-->
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<li><a href="index.html" class="active">Home</a></li>
+
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">给自己买<b class="caret"></b></a>
+							<ul class="dropdown-menu multi-column columns-4 animated bounceInDown">
+								<div class="row" id="navShowOne">
+									
+								</div>
+							</ul>
+						</li>
+					
+					   <li class="dropdown grid">
+							<a href="#" class="dropdown-toggle list1" data-toggle="dropdown">给女友买<b class="caret"></b></a>
+							<ul class="dropdown-menu multi-column columns-4 animated bounceInDown">
+								<div class="row" id="navShowTwo">
+									
+								</div>
+							</ul>
+						</li>
+
+						<li class="dropdown grid">
+							<a href="#" class="dropdown-toggle list1" data-toggle="dropdown">给朋友买<b class="caret"></b></a>
+							<ul class="dropdown-menu multi-column columns-4 animated bounceInDown">
+								<div class="row" id="navShowThree">
+									
+								</div>
+							</ul>
+						</li>
+						<li class="dropdown grid">
+							<a href="contact.html" class="dropdown-toggle list1">关于我们</a>
+						</li>								
+					</ul> 
+					<!--/.navbar-collapse-->
+				</div>
+				<!--//navbar-header-->
+			</nav>
+			<div class="header-info">
+				<div class="header-right search-box">
+					<a href="#"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></a>				
+					<div class="search">
+						<form class="navbar-form">
+							<input type="text" class="form-control up-loadKw" id="upload-kw">
+                            <button type="button" onclick="uploadKw()" class="btn btn-default" aria-label="Left Align">
+								Search
+							</button>
+						</form>
+					</div>	
+				</div>
+				<div class="header-right login">
+					<a><span class="glyphicon glyphicon-user" aria-hidden="true"></span></a>
+					<div id="loginBox">    
+
+						 <form id="loginForm" action="data/login.php"> 
+						<!-- <div id="loginForm"> -->
+							<fieldset id="body">
+								<fieldset>
+									<label for="phone">Phone Number</label>
+									<input type="text" name="phone" id="phone" onblur="checkPhone()">
+								</fieldset>
+								<fieldset>
+									<label for="upwd">Password</label>
+									<input type="password" name="upwd" id="upwd">
+								</fieldset>
+								<input type="submit" id="login" value="Sign in">
+								<label for="checkbox"><input type="checkbox" id="checkbox"> <i>Remember me</i></label>
+							</fieldset>
+							<p>没有账号? <a class="sign" href="account.html">那就注册</a> <span><a href="#">忘记密码就点我</a></span></p>
+						</form>
+
+					</div>
+				</div>
+				<div class="header-right cart">
+					<a href="#"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span></a>
+					<div class="cart-box" id="nav-cart-box">
+						<h4><a href="checkout.html">
+							<span id="simpleCart_total" class="simpleCart_total"> $0.00 </span> (<span id="simpleCart_quantity" class="simpleCart_quantity"> 0 </span>) 
+						</a></h4>
+						<p><a href="javascript:deleteCart(-1);" class="simpleCart_empty">清空购物车</a></p>
+						<div class="clearfix"> </div>
+					</div>
+				</div>
+				<div class="clearfix"> </div>
+			</div>
+			<div class="clearfix"> </div>
+		</div>
+	</div>
+	<!--//header-->
+	<!--contact-->
+	<div class="contact">
+		<div class="container">
+			<h2>About  Us</h2>
+			<div class="map">	
+				<!-- 这里要写上旋转木马哟 -->
+				<iframe src="banner.html"></iframe>
+			</div>
+			<div class="contact-infom">
+				<h4>Our Information :</h4>
+				<p style="text-indent:30px">Sweet甜品店以弘扬甜品原文化为己任，以专业、专心、专家、为企业经营理念。公司秉承诚信、求实的精神，坚持以客户为本的原则，重视加盟商、珍惜每一个加盟商与我们Sweet甜品的合作机会，共同发展，迎接甜品新财富之旅。Sweet将根据每一位客户的需求制定个性化的服务程式，创造“新甜品文化”之精神，皇家的品质，凤凰展翅之理想。
+				<p style="text-indent:30px">起于木，至于口，是为Sweet。</p>
+				<p style="text-indent:30px">Sweet坚持采摘纯天然水果，小产区原野原味，至美至鲜的甜品，源于天然雨水和阳光，让您尽情品尝大自然的味道。
+					在晴朗的午后，明媚的下午四点，饱满多汁的原季水果在酸性和糖分平衡瞬间成熟，便被经验丰富的水果采集师傅及时采摘</p>
+				<p style="text-indent:30px">果实的原味在恰到好吃的阳光催化下，最张扬的味道得以保留，同时锁住果汁原味，驱除露水对糖分的稀释和潮气的影响，味道更为浓郁，口感富有活力。
+				Sweet保持对新水果的苛刻态度，满足最挑剔的味蕾。</p>
+				</p>
+			</div>
+			<div class="address">
+				<div class="col-md-4 address-grids">
+					<h4>Address :</h4>
+					<ul>
+						<span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+						<p>湖南省长沙<br>
+							雨花区,<br>
+							佳天国际北栋28楼
+						</p>
+					</ul>
+				</div>
+				<div class="col-md-4 address-grids">
+					<h4>Phone Number :</h4>
+					<p><span class="glyphicon glyphicon-earphone" aria-hidden="true"></span>+176 2030 6826</p>
+					<p><span class="glyphicon glyphicon-print" aria-hidden="true"></span>+8588 8888 888</p>
+				</div>
+				<div class="col-md-4 address-grids">
+					<h4>My Email :</h4>
+					<p><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span><a href="#">13686750631@163.com</a></p>
+				</div>
+				<div class="clearfix"> </div>
+			</div>		
+			<div class="contact-form">
+				<h4>Please give me some advice:</h4>
+				<form>
+					<input type="text" value="你的大名" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '你的大名';}" required="">
+					<input type="text" value="你的邮箱" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '你的邮箱';}" required="">
+					<input type="text" value="你的电话" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '你的电话';}" required="">
+					<textarea type="text"  onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '期待您给我们提供宝贵的建议，我们将做得更好...';}" required="">期待您给我们提供宝贵的建议，我们将做得更好...</textarea>
+					<button class="btn1">提出建议</button>
+				</form>
+			</div>	
+		</div>
+	</div>
+	<!--//contact-->
+	<!--footer-->
+	<div class="footer">
+		<div class="container">
+			<div class="footer-grids">
+				<div class="col-md-2 footer-grid">
+					<h4>company</h4>
+					<ul>
+						<li><a href="products.html">产品首页</a></li>
+						<li><a href="#">办公地址</a></li>
+						<li><a href="#">团队成员</a></li>
+						<li><a href="#">项目开发</a></li>
+						<li><a href="#">产品定位</a></li>
+					</ul>
+				</div>
+				<div class="col-md-2 footer-grid">
+					<h4>service</h4>
+					<ul>
+						<li><a href="#">技术支持</a></li>
+						<li><a href="#">售后保障</a></li>
+						<li><a href="#">免费维护</a></li>
+						<li><a href="contact.html">联系我们</a></li>
+					</ul>
+				</div>
+				<div class="col-md-3 footer-grid">
+					<h4>I have a job</h4>
+					<ul>
+						<li><a href="#">前端工程师</a></li>
+						<li><a href="#">数据库分析</a></li>
+						<li><a href="#">后台维护师</a></li>
+						<li><a href="#">产品测试组</a></li>
+					</ul>
+				</div>
+				<div class="col-md-2 footer-grid">
+					<h4>legal</h4>
+					<ul>
+						<li><a href="#">隐私政策</a></li>
+						<li><a href="#">法律条款</a></li>
+						<li><a href="#">营业执照</a></li>
+					</ul>
+				</div>
+				<div class="col-md-3 footer-grid icons">
+					<h4>Connect with Us</h4>
+					<ul>
+						<li><a href="#"><img src="images/i1.png" alt=""/>如果我们有脸书</a></li>
+						<li><a href="#"><img src="images/i2.png" alt=""/>如果我们有推特</a></li>
+						<li><a href="#"><img src="images/wechat.png" alt=""/>还是微信联系吧</a></li>
+						<li><a href="#"><img src="images/sina.png" alt=""/>或者用新浪也行</a></li>
+					</ul>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+	</div>
+	<!--footer-->
+	<div class="footer-bottom">
+		<div class="container">
+			<p>Copyright &copy; 2017.Sweet有限公司所有权，团队：①<a href="#">丁稳</a>，②<a href="#">夏武</a>，③<a href="#">骆俊</a></p>
+		</div>
+	</div>
+</body>
+</html>

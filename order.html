@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Order</title>
+<!-- Custom Theme files -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+<!-- //Custom Theme files -->
+<link href="css/bootstrap.css" type="text/css" rel="stylesheet" media="all">
+<link href="css/style.css" type="text/css" rel="stylesheet" media="all">
+<link href="css/nave.css" type="text/css" rel="stylesheet" media="all"><!-- 丁稳写的全局样式 -->
+<!-- js -->
+<script src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/bootstrap-3.1.1.min.js"></script>
+<!-- //js -->
+<!-- cart -->
+<script src="js/simpleCart.min.js"> </script>
+<script src="js/sweet.js"></script><!-- 丁稳写的全局的js -->
+<script>
+	window.onload = function(){
+    uidCheck();//检查用户id是否存在
+	headerMain();//加载导航
+	loadOrder();
+	}
+
+	//接下来写的是加载购物车数据代码
+	function shoppingcartLoad(){
+		var uid = localStorage.uid;
+		if(!uid){
+			GI("shoppingcart-show").innerHTML="您还没有登录！";
+			return;
+		}
+		var xhr = getXhr();
+		xhr.open("get","data/shoppingcart_load.php?uid="+uid,true);
+		xhr.onreadystatechange = function(){
+			if(xhr.readyState==4 && xhr.status==200){
+				var cart = JSON.parse(xhr.responseText);
+				//处理数据，拼接
+				var cartshow = "<h2>My Shopping Cart("+cart.length+")</h2>";
+				var allPrice=0;
+				var orderInfo="|";
+				for(var i =0;i<cart.length;i++){
+					cartshow+= "<div class='cart-header'>";
+					cartshow+= 	"<div class='close' onclick='deleteCartRow("+cart[i].product_id+")'> </div>";
+					cartshow+= 		"<div class='cart-sec simpleCart_shelfItem'>";
+					cartshow+= 			"<div class='cart-item cyc'>";
+					cartshow+= 	 			"<img src='"+cart[i].pic+"' class='img-responsive' alt=''>";
+					cartshow+= 			"</div>";
+					cartshow+= 			"<div class='cart-item-info'>";
+					cartshow+= 				"<h3><a href='single.html' onclick='upPid("+cart[i].product_id+")'> "+cart[i].pname+" </a>";
+					cartshow+=				"<span>单价：￥"+cart[i].price*cart[i].onsale+"元</span></h3>";
+					cartshow+= 				"<ul class='qty'>";
+					cartshow+= 					"<li><p>原单价:￥"+cart[i].price+"元</p></li>";
+					cartshow+= 					"<li><p>购物车数量：共"+cart[i].count+"件</p></li>";
+					cartshow+= 				"</ul>";
+					cartshow+= 				"<div class='delivery'>";
+					cartshow+= 					"<p>小计：￥"+cart[i].price*cart[i].onsale*cart[i].count+"元</p>";
+					cartshow+= 					"<span>"+cart[i].fname+"</span>";
+					cartshow+= 					"<div class='clearfix'></div>";
+					cartshow+= 				"</div>	";
+					cartshow+= 			"</div>";
+					cartshow+= 		"<div class='clearfix'></div>";
+					cartshow+= 	"</div>";
+					cartshow+= "</div>";
+					allPrice += cart[i].price*cart[i].onsale*cart[i].count;//计算总价
+					orderInfo+= cart[i].pname+"*"+cart[i].count+"|";//拼接的订单详情
+				}
+				if(cart.length>0){
+					cartshow+= "<button>结算：共"+allPrice+"元</button>";//这个按钮还需要绑定点击事件，上传订单表需要的所有信息
+				}else{
+					cartshow+="您还未添加任何商品！";
+				}
+				GI("shoppingcart-show").innerHTML = cartshow;
+			}
+		}
+		xhr.send(null);
+	}
+</script>
+<!-- cart -->
+</head>
+<body>
+	<!--header-->
+	<div class="header">
+		<div class="container">
+			<nav class="navbar navbar-default" role="navigation">
+				<div class="navbar-header">
+					<!-- <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar">这是哪里这是哪里啊啊啊啊啊啊啊啊</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button> -->
+					<h1 class="navbar-brand"><a  href="index.html">Sweet</a></h1>
+				</div>
+				<!--navbar-header-->
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<li><a href="index.html" class="active">Home</a></li>
+
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">给自己买<b class="caret"></b></a>
+							<ul class="dropdown-menu multi-column columns-4 animated bounceInDown">
+								<div class="row" id="navShowOne">
+									
+								</div>
+							</ul>
+						</li>
+					
+					   <li class="dropdown grid">
+							<a href="#" class="dropdown-toggle list1" data-toggle="dropdown">给女友买<b class="caret"></b></a>
+							<ul class="dropdown-menu multi-column columns-4 animated bounceInDown">
+								<div class="row" id="navShowTwo">
+									
+								</div>
+							</ul>
+						</li>
+
+						<li class="dropdown grid">
+							<a href="#" class="dropdown-toggle list1" data-toggle="dropdown">给朋友买<b class="caret"></b></a>
+							<ul class="dropdown-menu multi-column columns-4 animated bounceInDown">
+								<div class="row" id="navShowThree">
+									
+								</div>
+							</ul>
+						</li>
+						<li class="dropdown grid">
+							<a href="contact.html" class="dropdown-toggle list1">关于我们</a>
+						</li>								
+					</ul> 
+					<!--/.navbar-collapse-->
+				</div>
+				<!--//navbar-header-->
+			</nav>
+			<div class="header-info">
+				<div class="header-right search-box">
+					<a href="#"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></a>				
+					<div class="search">
+						<form class="navbar-form">
+							<input type="text" class="form-control" id="upload-kw">
+							<button type="submit" class="btn btn-default" aria-label="Left Align" onclick="uploadKw()">
+								Search
+							</button>
+						</form>
+					</div>	
+				</div>
+				<div class="header-right login">
+					<a><span class="glyphicon glyphicon-user" aria-hidden="true"></span></a>
+					<div id="loginBox">    
+
+						 <form id="loginForm" action="data/login.php"> 
+						<!-- <div id="loginForm"> -->
+							<fieldset id="body">
+								<fieldset>
+									<label for="phone">Phone Number</label>
+									<input type="text" name="phone" id="phone" onblur="checkPhone()">
+								</fieldset>
+								<fieldset>
+									<label for="upwd">Password</label>
+									<input type="password" name="upwd" id="upwd">
+								</fieldset>
+								<input type="submit" id="login" value="Sign in">
+								<label for="checkbox"><input type="checkbox" id="checkbox"> <i>Remember me</i></label>
+							</fieldset>
+							<p>没有账号? <a class="sign" href="account.html">那就注册</a> <span><a href="#">忘记密码就点我</a></span></p>
+						</form>
+
+					</div>
+				</div>
+				<div class="header-right cart">
+					<a href="#"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span></a>
+					<div class="cart-box" id="nav-cart-box">
+						<h4><a href="checkout.html">
+							<span id="simpleCart_total" class="simpleCart_total"> $0.00 </span> (<span id="simpleCart_quantity" class="simpleCart_quantity"> 0 </span>) 
+						</a></h4>
+						<p><a href="javascript:deleteCart(-1);" class="simpleCart_empty">清空购物车</a></p>
+						<div class="clearfix"> </div>
+					</div>
+				</div>
+				<div class="clearfix"> </div>
+			</div>
+			<div class="clearfix"> </div>
+		</div>
+	</div>
+	<!--//header-->
+
+	<!--cart-items 正文从这里开始-->
+	--
+	<div class="orderInfos" id="orderInfos">
+		<!-- 第一个订单的数据处理开始 -->
+		<div class="orderbox">
+			<div class="orderInfo">
+				<div class="info">
+					<span class="info-name">订单详情：</span>
+					<span class="info-msg">写的是orderInfo里的数据</span>
+				</div>
+				<div class="order-statu">
+					<span class="os-s">订单状态：<span>status</span></span>
+					<span class="all-price">总价钱：<span>allPrice</span></span>
+					<span class="order-time">下单时间：<span>order-time</span></span>
+				</div>
+			</div>
+		</div>	
+		<!-- 第一个订单的数据处理结束 -->
+	</div>
+	
+	<!-- 正文从这里结束 -->
+
+	<!--//checkout-->	
+	<!--footer-->
+	<div class="footer">
+		<div class="container">
+			<div class="footer-grids">
+				<div class="col-md-2 footer-grid">
+					<h4>company</h4>
+					<ul>
+						<li><a href="products.html">产品首页</a></li>
+						<li><a href="#">办公地址</a></li>
+						<li><a href="#">团队成员</a></li>
+						<li><a href="#">项目开发</a></li>
+						<li><a href="#">产品定位</a></li>
+					</ul>
+				</div>
+				<div class="col-md-2 footer-grid">
+					<h4>service</h4>
+					<ul>
+						<li><a href="#">技术支持</a></li>
+						<li><a href="#">售后保障</a></li>
+						<li><a href="#">免费维护</a></li>
+						<li><a href="contact.html">联系我们</a></li>
+					</ul>
+				</div>
+				<div class="col-md-3 footer-grid">
+					<h4>I have a job</h4>
+					<ul>
+						<li><a href="#">前端工程师</a></li>
+						<li><a href="#">数据库分析</a></li>
+						<li><a href="#">后台维护师</a></li>
+						<li><a href="#">产品测试组</a></li>
+					</ul>
+				</div>
+				<div class="col-md-2 footer-grid">
+					<h4>legal</h4>
+					<ul>
+						<li><a href="#">隐私政策</a></li>
+						<li><a href="#">法律条款</a></li>
+						<li><a href="#">营业执照</a></li>
+					</ul>
+				</div>
+				<div class="col-md-3 footer-grid icons">
+					<h4>Connect with Us</h4>
+					<ul>
+						<li><a href="#"><img src="images/i1.png" alt=""/>如果我们有脸书</a></li>
+						<li><a href="#"><img src="images/i2.png" alt=""/>如果我们有推特</a></li>
+						<li><a href="#"><img src="images/wechat.png" alt=""/>还是用微信联系吧</a></li>
+						<li><a href="#"><img src="images/sina.png" alt=""/>或者用新浪也行</a></li>
+					</ul>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+	</div>
+	<!--footer-->
+	<div class="footer-bottom">
+		<div class="container">
+			<p>Copyright &copy; 2017.Sweet有限公司所有权，团队：①<a href="#">丁稳</a>，②<a href="#">夏武</a>，②<a href="#">骆俊</a></p>
+		</div>
+	</div>
+</body>
+</html>
