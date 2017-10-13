@@ -1,0 +1,53 @@
+/* 
+丁稳写的header部分的样式，不懂问丁稳
+*/
+
+.welcome{color:#55D2FF;
+                    padding:10px;}
+
+.redfont{
+    color:#F17C67;
+    
+    transition: 0.5s all;
+}
+
+#orderInfos{
+    padding-top: 10px;
+    padding-bottom: 0px;
+    font-family: '微软雅黑';
+    background-image: url(../images/background.jpg);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+.orderbox{
+    margin: 20px auto 20px;
+    width: 100%;
+    border-radius: 3px;
+    box-sizing: border-box;
+    padding: 3% 6% 3% 6%;
+    padding-bottom: 1%; 
+    background-position: center center;
+    background-color: rgba(248, 250, 251, 0.9)
+}
+
+.orderbox .info{
+    font-size: 22px;
+    width: 80%;
+    margin:0 auto;
+    color:#222;
+    font-family: 幼圆;
+    text-shadow: 3px 3px 3px #fff;
+    font-weight: 600;
+}
+
+.orderbox .order-statu{
+    width: 80%;
+    margin: 50px auto 10px;
+    display: flex;
+    justify-content: space-between;
+    color:#999;
+    font-size: 16px;
+
+}
